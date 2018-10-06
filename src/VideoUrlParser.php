@@ -34,6 +34,7 @@ class VideoUrlParser {
         case 'youtube':
           $id = $this->get_youtube_id($url);
           $video['type'] = 'youtube';
+          $video['thumb'] = "http://img.youtube.com/vi/{$id}/mqdefault.jpg";
           $video['embed'] = $this->get_youtube_embed($id);
           break;
 
@@ -42,6 +43,7 @@ class VideoUrlParser {
           if ($x){
             $id = $x->video_id;
             $video['type'] = 'vimeo';
+            $video['thumb'] = $x->thumbnail_url;
             $video['embed'] = $this->get_vimeo_embed($id);
           }
           break;
