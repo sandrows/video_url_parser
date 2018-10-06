@@ -53,10 +53,10 @@ class VideoUrlParser {
    * @return null|string
    */
   private function identify_service($url) {
-    if (preg_match('%youtube|youtu\.be%i', $url)) {
+    if (preg_match('%(?:https?:)?//(?:(?:www|m)\.)?(youtube(?:-nocookie)?\.com|youtu\.be)\/%i', $url)) {
       return 'youtube';
     }
-    elseif (preg_match('%vimeo%i', $url)) {
+    elseif (preg_match('%(?:https?:)?//(?:[a-z]+\.)*vimeo\.com\/%i', $url)) {
       return 'vimeo';
     }
 
