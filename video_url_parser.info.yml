@@ -1,0 +1,6 @@
+name: Video URL Parser
+description: Detects a video hoster and retrieves the ID, thumbnail and embed code.
+core: 8.x
+type: module
+package: Other
+version: 1.0
