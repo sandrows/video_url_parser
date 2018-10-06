@@ -2,6 +2,8 @@
 
 namespace Drupal\video_url_parser;
 
+use SimpleXMLElement;
+
 class VideoUrlParser {
 
   private $service;
@@ -36,9 +38,12 @@ class VideoUrlParser {
           break;
 
         case 'vimeo':
-          $id = $this->url_last_param($url);
-          $video['type'] = 'vimeo';
-          $video['embed'] = $this->get_vimeo_embed($id);
+          $x = $this->vimeo_api($url);
+          if ($x){
+            $id = $x->video_id;
+            $video['type'] = 'vimeo';
+            $video['embed'] = $this->get_vimeo_embed($id);
+          }
           break;
       }
     }
@@ -100,6 +105,26 @@ class VideoUrlParser {
   private function get_vimeo_embed($vimeo_video_id, $autoplay = 1) {
     $embed = "http://player.vimeo.com/video/$vimeo_video_id?autoplay=$autoplay";
     return $embed;
+  }
+
+  /**
+   * Use Vimeo's API to get the ID and the thumbnail image.
+   * @param string $url
+   *
+   * @return \SimpleXMLElement|false
+   */
+  private function vimeo_api($url) {
+    $oembed_endpoint = 'http://vimeo.com/api/oembed';
+    $video_url = $url;
+    $xml_url = $oembed_endpoint . '.xml?url=' . rawurlencode($video_url) . '&width=640';
+
+    try{
+      $result = new SimpleXMLElement($xml_url, 0, TRUE);
+    }catch (\Exception $ex){
+      $result = FALSE;
+    }
+
+    return $result;
   }
 
   /**
