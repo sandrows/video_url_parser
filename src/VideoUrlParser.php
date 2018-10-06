@@ -4,7 +4,10 @@ namespace Drupal\video_url_parser;
 
 use SimpleXMLElement;
 
-class VideoUrlParser {
+/**
+ * Expose the VideoUrlParser functions to Twig.
+ */
+class VideoUrlParser extends \Twig_Extension {
 
   private $service;
 
@@ -15,8 +18,26 @@ class VideoUrlParser {
    */
   public function __construct() {
     if (!extension_loaded('pcre')) {
-      throw new \Exception("PCRE extension is required.");
+      throw new \Exception("This Twig extension requires PHP's PCRE extension.");
     }
+  }
+
+  /**
+   * Return extension name
+   *
+   * @return string
+   */
+  public function getName() {
+    return 'video_url_parser';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getFilters() {
+    return [
+      new \Twig_SimpleFilter('video_url', [$this, 'parse']),
+    ];
   }
 
   /**
